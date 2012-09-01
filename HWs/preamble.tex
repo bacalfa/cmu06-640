@@ -1,0 +1,198 @@
+% Default preamble to be included by: \input{preamble}
+
+%%% Document dimensions
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+%%%
+
+%%% Language support
+\usepackage[english]{babel} % Get everything translated properly
+\usepackage[latin1]{inputenc} % Input text correctly
+\usepackage[T1]{fontenc} % Get hyphenation right
+%%%
+
+%%% AMS support
+\usepackage{amsmath}
+\usepackage{amsfonts}   % fonts
+\usepackage{amssymb}    % extra symbols
+\usepackage{amsthm} % Theorems
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+%%%
+
+%%% Numbering equations
+%\numberwithin{equation}{section}
+%\numberwithin{equation}{subsection}
+%%%
+
+%%% Typeset source code listings
+\usepackage{listings}
+%%%
+
+%%% Customising captions in floating environments.
+\usepackage{caption}
+%%%
+
+%%% Empheq support
+\usepackage{empheq}
+\newcommand*\widefbox[1]{\fbox{\hspace{1em}#1\hspace{1em}}} % A little more space to the right and left of \fbox
+\newcommand*\widefboxb[1]{\fbox{\hspace{3em}#1\hspace{3em}}} % A little more space to the right and left of \fbox
+%%%
+
+%%% Allow for right-alinment in matrix environment
+\makeatletter
+\renewcommand*\env@matrix[1][c]{\hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{*\c@MaxMatrixCols #1}}
+\makeatother
+%%%
+
+%%% Control the display of the enumeration counter
+\usepackage{enumerate}
+%%%
+
+%%% Defining floating objects
+\usepackage{float}
+%%%
+
+%%% Insert figures
+\usepackage{graphicx}
+%%%
+
+%%% Type units in math mode
+\usepackage{units}
+%%%
+
+%%% Add subfigures
+\usepackage{subfigure}
+%%%
+
+%%% Add URL text
+\usepackage{url}
+%%%
+
+%%% Color package
+\usepackage{color}
+%%%
+
+%%% NatBib bibliography
+\usepackage{natbib}
+\bibpunct{[}{]}{;}{a}{,}{,}
+%%%
+
+%%% Reference last page for Page N of M type footers
+\usepackage{lastpage}
+%%%
+
+%%% Fancy header and footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{06-640 \\ Principles and Applications of Molecular Simulation}
+%\chead{Homeworks 1 \\}
+\rhead{Bruno Abreu Calfa \\ User ID: bcalfa}
+%\lfoot{\today}
+\cfoot{}
+\rfoot{\thepage ~of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%%%
+
+%%% Create colored hyperlinks
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue}
+%%%
+
+%%% Create a Nomenclature page
+\usepackage{nomencl}
+%%%
+
+%%% Line spacing
+%\linespread{1.3} % 1.5 spacing
+%\linespread{1.6} % double spacing
+%%%
+
+%%% Cancel math terms
+\usepackage{cancel}
+%%%
+
+%%% Text superscripts and subscripts
+\usepackage{fmtcount}
+%\fmtcountsetoptions{fmtord=level} % if the format should be leveled with the text
+%%%
+
+\usepackage{array}
+
+%%% Multiple rows in tables
+\usepackage{multirow}
+%%%
+
+%%% pdfpages
+\usepackage{pdfpages}
+%%%
+
+%%% Professional tables
+\usepackage{booktabs}
+\newcolumntype{+}{>{\global\let\currentrowstyle\relax}}
+\newcolumntype{^}{>{\currentrowstyle}}
+	\newcommand{\rowstyle}[1]{\gdef\currentrowstyle{#1} %
+	#1\ignorespaces
+	}
+\newcommand{\otoprule}{\midrule[\heavyrulewidth]}
+%%%
+
+%%% Overwrite \bfseries such that it switches to the bold math version
+\makeatletter
+\DeclareRobustCommand*{\bfseries}{%
+  \not@math@alphabet\bfseries\mathbf
+  \fontseries\bfdefault\selectfont
+  \boldmath
+}
+\makeatother
+%%%
+
+%\usepackage{theorem}
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{proposition}[theorem]{Proposition}
+%\newtheorem{corollary}[theorem]{Corollary}
+%
+%\newenvironment{proof}[1][Proof]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%\newenvironment{definition}[1][Definition]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%\newenvironment{example}[1][Example]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%\newenvironment{remark}[1][Remark]{\begin{trivlist}
+%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+%
+%\newcommand{\qed}{\nobreak \ifvmode \relax \else
+%      \ifdim\lastskip<1.5em \hskip-\lastskip
+%      \hskip1.5em plus0em minus0.5em \fi \nobreak
+%      \vrule height0.75em width0.5em depth0.25em\fi}
+
+
+
+%%% Chemical formulas
+%\usepackage{chemtimes}
+%\renewcommand{\rmdefault}{cmr} % set ``Computer Modern Roman'' as default for \textrm, \rmfamily.
+%\renewcommand{\sfdefault}{cmss} % set ``Computer Modern Sans'' as default for \textsf, \sffamily.
+%\renewcommand{\ttdefault}{cmtt} % set ``Computer Modern Typewriter'' as default for \texttt, \ttfamily.
+%\DeclareMathVersion{normal}
+%\SetSymbolFont{letters}{normal}{OML}{cmm}{m}{it} % ``fix'' math normal version fonts
+%\SetSymbolFont{operators}{normal}{OT1}{cmr}{m}{n} % ``fix'' math normal version fonts
+%\SetSymbolFont{symbols}{normal}{OMS}{cmsy}{m}{n} % ``fix'' math normal version fonts
+%\SetSymbolFont{largesymbols}{normal}{OMX}{cmex}{m}{n} % ``fix'' math normal version fonts
+%\DeclareMathVersion{bold}
+%\SetSymbolFont{operators}{bold}{OT1}{cmr}{bx}{n} % ``fix'' math bold version fonts
+%\SetSymbolFont{letters}{bold}{OML}{cmm}{b}{it} % ``fix'' math bold version fonts
+%\SetSymbolFont{symbols}{bold}{OMS}{cmsy}{bx}{n} % ``fix'' math bold version fonts
+%\SetSymbolFont{largesymbols}{bold}{OMX}{cmex}{bx}{n} % ``fix'' math bold version fonts
+%%%
+
+%%% User-Declared operators
+\DeclareMathOperator{\erfc}{erfc}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\diag}{diag}
+%%%
