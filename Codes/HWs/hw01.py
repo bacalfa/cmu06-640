@@ -10,10 +10,7 @@ Imports and configurations
 '''
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import rc
 from scipy.optimize import fsolve
-
-rc('text', usetex=True)
 
 '''
 Problem 4
@@ -30,11 +27,9 @@ p = np.poly1d(np.polyfit(latConst, totE, 3))
 dp = np.polyder(p, 1)
 z = np.roots(dp)
 
-# Get minimizer of p
-z_min = []
-for i in range(len(z)):
-    if (z[i] >= np.min(latConst) and z[i] <= np.max(latConst)):
-        z_min.append(z[i])
+# Get minimizer of p (second derivative is positive)
+dpp = np.polyder(dp, 1)
+z_min = z[np.polyval(dpp, z) > 0]
 print 'The estimated minimum is = {0:.2f}'.format(z_min[0])
 
 # Plot results
@@ -46,11 +41,11 @@ ax = fig.add_subplot(1,1,1)
 ax.plot(x,y,color='b')
 ax.plot(latConst,totE,marker='o',markersize=10,color='r',linestyle='')
 ax.plot(z_min,np.polyval(p, z_min),marker='o',markersize=12,color='k')
-ax.annotate('Minimum', xy=(z_min[0], np.polyval(p, z_min) + 0.003), 
-            xytext=(z_min[0] - 0.01, np.polyval(p, z_min) + 0.01),
+ax.annotate('Minimum', xy=(z_min, np.polyval(p, z_min) + 0.003), 
+            xytext=(z_min - 0.01, np.polyval(p, z_min) + 0.01),
             arrowprops=dict(facecolor='black'),
             )
-plt.xlabel(r'Lattice Constant [\r{A}]')
+plt.xlabel('Lattice Constant [$\r{A}$]')
 plt.ylabel('Total Energy [eV]')
 plt.legend(['Poly Fit', 'Data'], loc='best')
 plt.savefig('hw01_prob4.png')
