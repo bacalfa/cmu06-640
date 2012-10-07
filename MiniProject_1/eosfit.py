@@ -109,7 +109,7 @@ class EOS:
             
             # Compute optimal parameters from pseudo-inverse
             X = np.asmatrix(X)
-            self.p = np.asarray(np.dot(np.linalg.inv(X.T*X)*X.T, self.E))[0]
+            self.p = np.linalg.solve(X.T*X, np.asarray(np.dot(X.T, self.E))[0])
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.BM5(self.V, self.p[0], self.p[1], self.p[2], self.p[3], self.p[4])
             s2 = (np.linalg.norm(self.res))**2/self.dof # Estimated residual variance 
@@ -127,7 +127,7 @@ class EOS:
             
             # Compute optimal parameters from pseudo-inverse
             X = np.asmatrix(X)
-            self.p = np.asarray(np.dot(np.linalg.inv(X.T*X)*X.T, self.E))[0]
+            self.p = np.linalg.solve(X.T*X, np.asarray(np.dot(X.T, self.E))[0])
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.BM5(self.V, self.p[0], self.p[1], self.p[2], self.p[3], self.p[4])
             s2 = (np.linalg.norm(self.res))**2/self.dof # Estimated residual variance 
@@ -144,7 +144,7 @@ class EOS:
             
             # Compute optimal parameters from pseudo-inverse
             X = np.asmatrix(X)
-            self.p = np.asarray(np.dot(np.linalg.inv(X.T*X)*X.T, self.E))[0]
+            self.p = np.linalg.solve(X.T*X, np.asarray(np.dot(X.T, self.E))[0])
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.BM4(self.V, self.p[0], self.p[1], self.p[2], self.p[3])
             s2 = (np.linalg.norm(self.res))**2/self.dof # Estimated residual variance 
@@ -161,7 +161,7 @@ class EOS:
             
             # Compute optimal parameters from pseudo-inverse
             X = np.asmatrix(X)
-            self.p = np.asarray(np.dot(np.linalg.inv(X.T*X)*X.T, self.E))[0]
+            self.p = np.linalg.solve(X.T*X, np.asarray(np.dot(X.T, self.E))[0])
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.mBM4(self.V, self.p[0], self.p[1], self.p[2], self.p[3])
             s2 = (np.linalg.norm(self.res))**2/self.dof # Estimated residual variance 
@@ -179,7 +179,7 @@ class EOS:
             
             # Compute optimal parameters from pseudo-inverse
             X = np.asmatrix(X)
-            self.p = np.asarray(np.dot(np.linalg.inv(X.T*X)*X.T, self.E))[0]
+            self.p = np.linalg.solve(X.T*X, np.asarray(np.dot(X.T, self.E))[0])
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.LOG5(self.V, self.p[0], self.p[1], self.p[2], self.p[3], self.p[4])
             s2 = (np.linalg.norm(self.res))**2/self.dof # Estimated residual variance 
@@ -196,7 +196,7 @@ class EOS:
             
             # Compute optimal parameters from pseudo-inverse
             X = np.asmatrix(X)
-            self.p = np.asarray(np.dot(np.linalg.inv(X.T*X)*X.T, self.E))[0]
+            self.p = np.linalg.solve(X.T*X, np.asarray(np.dot(X.T, self.E))[0])
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.LOG4(self.V, self.p[0], self.p[1], self.p[2], self.p[3])
             s2 = (np.linalg.norm(self.res))**2/self.dof # Estimated residual variance 
