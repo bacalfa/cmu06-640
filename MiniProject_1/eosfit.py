@@ -4,8 +4,21 @@
 from sys import exit
 import numpy as np
 from scipy.optimize import curve_fit
-from scipy.optimize import leastsq
 from scipy.stats import t
+
+class EOSmodel:
+    '''
+    Emulates an 'enum' structure with the EOS models available.
+    '''
+    BM5 = 0
+    BM4 = 1
+    mBM5 = 2
+    mBM4 = 3
+    LOG4 = 4
+    LOG5 = 5
+    MU4 = 6
+    VI4 = 7
+    MO4 = 8
 
 class EOS:
     '''
@@ -27,23 +40,21 @@ class EOS:
     Debye model: Application to Ni and Ni3Al. Computational Materials Science. 47(4): 1040-1048.
     '''
     
-    __available_models = ('BM5', 'BM4', 'mBM5', 'mBM4', 'LOG4', 'LOG5', 'MU4', 'VI4', 'MO4') # Models implemented
+    model = EOSmodel.MU4    # Default EOS model
+    V = np.array([])        # Volume data
+    E = np.array([])        # Energy data
+    p = np.array([])        # Parameters mean values
+    res = np.array([])      # Residual of nonlinear regression
+    ci = np.array([])       # Confidence intervals of p
+    pcov = np.array([])     # Estimated covariance of optimal p
+    dof = 0                 # Degrees of freedom
     
-    model = 'MU4'       # Default EOS model
-    V = np.array([])    # Volume data
-    E = np.array([])    # Energy data
-    p = np.array([])    # Parameters mean values
-    res = np.array([])  # Residual of nonlinear regression
-    ci = np.array([])   # Confidence intervals of p
-    pcov = np.array([]) # Estimated covariance of optimal p
-    dof = 0             # Degrees of freedom
-    
-    def __init__(self, V, E, model='MU4'):
+    def __init__(self, V, E, model=EOSmodel.MU4):
         '''
         Constructor.
         @keyword V: Volume data (numpy array)
         @keyword E: Energy data (numpy array)
-        @keyword model: Model name (default: MU4. See class documentation for available models)
+        @keyword model: Model name (default: EOSmodel.MU4. Use class EOSmodel for available models.)
         @requires: NumPy package
         '''
         # Validate inputs
@@ -53,20 +64,31 @@ class EOS:
         if len(V) != len(E):
             print 'ERROR: Vectors V and E must have the same length'
             exit(0)
-        isValidModel = False
-        for mod in self.__available_models:
-            if (mod == model):
-                isValidModel = True
-                break
-        if not isValidModel:
-            print "ERROR: Model '{0}' is not valid".format(model)
-            exit(0)
+        self.__validate_model(model)
         
         # Set data and model
         self.V = V
         self.E = E
         self.model = model
-        
+    
+    def __validate_model(self, model):
+        isValidModel = False
+        for mod in dir(EOSmodel):
+            if (getattr(EOSmodel, mod) == model):
+                isValidModel = True
+                break
+        if not isValidModel:
+            print "ERROR: Model '{0}' is not valid".format(model)
+            exit(0)
+    
+    def set_model(self, model):
+        '''
+        Sets the current EOS model.
+        @param model: The current model
+        '''
+        self.__validate_model(model)
+        self.model = model
+    
     def fit(self, p0=None):
         '''
         Fits the data to a selected EOS model.
@@ -76,7 +98,7 @@ class EOS:
         # Fit the data to the selected model
         # Linear models: y = Xp, where y is E and X is matrix made of V terms
         # Nonlinear models: use SciPy's curve_fit function
-        if self.model == 'BM5': # Linear model
+        if self.model == EOSmodel.BM5: # Linear model
             # Create regressor matrix (X)
             X = np.zeros((len(self.E),5))
             X[:,0] = np.ones(len(self.E))
@@ -94,7 +116,7 @@ class EOS:
             self.pcov = s2*np.linalg.inv(X.T*X)
             return self.p
         
-        elif self.model == 'mBM5': # Linear model
+        elif self.model == EOSmodel.mBM5: # Linear model
             # Create regressor matrix (X)
             X = np.zeros((len(self.E),5))
             X[:,0] = np.ones(len(self.E))
@@ -112,7 +134,7 @@ class EOS:
             self.pcov = s2*np.linalg.inv(X.T*X)
             return self.p
         
-        elif self.model == 'BM4': # Linear model
+        elif self.model == EOSmodel.BM4: # Linear model
             # Create regressor matrix (X)
             X = np.zeros((len(self.E),4))
             X[:,0] = np.ones(len(self.E))
@@ -129,7 +151,7 @@ class EOS:
             self.pcov = s2*np.linalg.inv(X.T*X)
             return self.p
         
-        elif self.model == 'mBM4': # Linear model
+        elif self.model == EOSmodel.mBM4: # Linear model
             # Create regressor matrix (X)
             X = np.zeros((len(self.E),4))
             X[:,0] = np.ones(len(self.E))
@@ -146,7 +168,7 @@ class EOS:
             self.pcov = s2*np.linalg.inv(X.T*X)
             return self.p
         
-        elif self.model == 'LOG5': # Linear model
+        elif self.model == EOSmodel.LOG5: # Linear model
             # Create regressor matrix (X)
             X = np.zeros((len(self.E),5))
             X[:,0] = np.ones(len(self.E))
@@ -164,7 +186,7 @@ class EOS:
             self.pcov = s2*np.linalg.inv(X.T*X)
             return self.p
         
-        elif self.model == 'LOG4': # Linear model
+        elif self.model == EOSmodel.LOG4: # Linear model
             # Create regressor matrix (X)
             X = np.zeros((len(self.E),4))
             X[:,0] = np.ones(len(self.E))
@@ -181,30 +203,23 @@ class EOS:
             self.pcov = s2*np.linalg.inv(X.T*X)
             return self.p
         
-        elif self.model == 'MU4': # Nonlinear model
+        elif self.model == EOSmodel.MU4: # Nonlinear model
             self.p, self.pcov = curve_fit(self.MU4, self.V, self.E, p0)
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.MU4(self.V, self.p[0], self.p[1], self.p[2], self.p[3])
             return self.p
         
-        elif self.model == 'VI4': # Nonlinear model
+        elif self.model == EOSmodel.VI4: # Nonlinear model
             self.p, self.pcov = curve_fit(self.VI4, self.V, self.E, p0)
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.VI4(self.V, self.p[0], self.p[1], self.p[2], self.p[3])
             return self.p
         
-        elif self.model == 'MO4': # Nonlinear model
+        elif self.model == EOSmodel.MO4: # Nonlinear model
             self.p, self.pcov = curve_fit(self.MO4, self.V, self.E, p0)
             self.dof = len(self.E) - len(self.p)
             self.res = self.E - self.MO4(self.V, self.p[0], self.p[1], self.p[2], self.p[3])
             return self.p
-    
-    def set_model(self, model):
-        '''
-        Sets the current EOS model.
-        @param model: The current model
-        '''
-        self.model = model
     
     def get_ci(self, alpha=0.95):
         '''

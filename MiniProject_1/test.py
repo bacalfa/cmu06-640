@@ -5,7 +5,7 @@ Test file for module eosfit
 '''
 
 # Imports
-from eosfit import EOS
+from eosfit import EOS, EOSmodel
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -21,7 +21,7 @@ EMU4 = eos.MU4(V, pMU4[0], pMU4[1], pMU4[2], pMU4[3])
 print pMU4, ciMU4, EMU4
 
 # BM5 model
-eos.set_model('BM5')
+eos.set_model(EOSmodel.BM5)
 pBM5 = eos.fit() # No initial guess required (linear model)
 ciBM5 = eos.get_ci()
 EBM5 = eos.BM5(V, pBM5[0], pBM5[1], pBM5[2], pBM5[3], pBM5[4])
